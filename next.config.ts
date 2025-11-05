@@ -16,7 +16,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  outputFileTracingRoot: path.resolve(__dirname, '../../'),
+  // Removed outputFileTracingRoot - causes issues in Vercel
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -27,13 +27,16 @@ const nextConfig: NextConfig = {
     config.externals.push("pino-pretty", "lokijs", "encoding");
     return config;
   },
-  turbopack: {
-    rules: {
-      "*.{jsx,tsx}": {
-        loaders: [LOADER]
+  // Turbopack config - only for local dev
+  ...(process.env.NODE_ENV === 'development' && {
+    turbopack: {
+      rules: {
+        "*.{jsx,tsx}": {
+          loaders: [LOADER]
+        }
       }
     }
-  }
+  })
 };
 
 export default nextConfig;
